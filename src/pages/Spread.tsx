@@ -149,7 +149,7 @@ export default function Spread() {
           finalDate: dateFinal
         }, { headers: {
           authorization: "Bearer "+ localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "http://localhost:5173"
+          "Access-Control-Allow-Origin": "https://smartfin.vercel.app/"
         }})
         //@ts-ignore
         const {ativoA, ativoB } = data;
@@ -284,6 +284,7 @@ export default function Spread() {
                     className="font-bold text-sm bg-transparent outline-none dark:text-[#EDEEF0]"
                     id="inputSalario"
                     type="date"
+                    placeholder={new Date().toISOString().split("T")[0]}
                     value={dateInit}
                     onChange={(e) => {setDateInit(e.target.value)}}
                   />
