@@ -272,7 +272,7 @@ export default function Spread() {
             </div>
 
             <div className="flex gap-2">
-              <div className="flex flex-1 items-center justify-between py-2 px-4 rounded-lg border-b-2 border-[#000000] dark:border-[#EDEEF0]">
+              <div className="flex flex-1 items-center w-[50%] justify-between py-2 px-4 rounded-lg border-b-2 border-[#000000] dark:border-[#EDEEF0]">
                 <div className="flex flex-col">
                   <label
                     className="dark:text-[#EDEEF0]"
@@ -281,7 +281,7 @@ export default function Spread() {
                     Data inicial
                   </label>
                   <input
-                    className="font-bold text-sm bg-transparent outline-none dark:text-[#EDEEF0]"
+                    className="font-bold text-sm w-[90%] bg-transparent outline-none dark:text-[#EDEEF0]"
                     id="inputSalario"
                     type="date"
                     placeholder={new Date().toISOString().split("T")[0]}
@@ -291,7 +291,7 @@ export default function Spread() {
                 </div>
               </div>
 
-              <div className="flex flex-1 items-center justify-between py-2 px-4 rounded-lg border-b-2 border-[#000000] dark:border-[#EDEEF0]">
+              <div className="flex flex-1 items-center w-[50%] justify-between py-2 px-4 rounded-lg border-b-2 border-[#000000] dark:border-[#EDEEF0]">
                 <div className="flex flex-col">
                   <label
                     className="dark:text-[#EDEEF0]"
@@ -300,7 +300,7 @@ export default function Spread() {
                     Data final
                   </label>
                   <input
-                    className="font-bold text-sm bg-transparent outline-none dark:text-[#EDEEF0]"
+                    className="font-bold text-sm w-[80%] bg-transparent outline-none dark:text-[#EDEEF0]"
                     id="inputSalario"
                     type="date"
                     value={dateFinal}
@@ -309,6 +309,7 @@ export default function Spread() {
                 </div>
               </div>
             </div>
+
             <div className="flex flex-1 items-center justify-between py-2 px-4 rounded-lg border-b-2 border-[#000000] dark:border-[#EDEEF0]">
               <div className="flex flex-col">
                 <label className="dark:text-[#EDEEF0]" htmlFor="#inputSalario">
