@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-import styles from '../login.module.css';
 
 export default function RecuperacaoSenha() {
   const [email, setEmail] = useState('');
@@ -51,7 +50,7 @@ export default function RecuperacaoSenha() {
             </div>
             <div className="col-lg-6 bg-[#201F25] h-[100vh]">
               <div className="container">
-                <div className={styles.centralizar}>
+                <div>
                   <div className="formulario">
                     <h4 className="font-bold text-left pb-4">Recuperação de Senha</h4>
                     {showSuccessMessage && (
