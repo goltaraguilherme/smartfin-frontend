@@ -34,7 +34,7 @@ export default function Login({ handleLogin }: LoginProps) {
       const { data } = await api.post(
         "/users/authenticate",
         { email, password },
-        { headers: { "Access-Control-Allow-Origin": "http://localhost:5173" } }
+        { headers: { "Access-Control-Allow-Origin": "https://smartfin.vercel.app/" } }
       );
 
       const { token, name } = data;
@@ -116,7 +116,7 @@ export default function Login({ handleLogin }: LoginProps) {
                     style={{
                       borderRadius: "10px",
                     }}
-                    className="w-[80%] p-2 bg-transparent border border-[#505050]"
+                    className="w-[80%] p-2 bg-transparent border border-white"
                     type="email"
                     id="email"
                     placeholder="Seu email"
@@ -155,11 +155,11 @@ export default function Login({ handleLogin }: LoginProps) {
                   </button>
 
                   <div className="pt-4">
-                    <p>
+                    {/* <p>
                       <Link className="text-blue-500" to={"/esqueci"}>
                         Esqueci a senha
                       </Link>
-                    </p>
+                    </p> */}
 
                     <p>
                       Ainda não tem uma conta?{" "}
