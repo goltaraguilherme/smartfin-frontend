@@ -1,117 +1,139 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-interface User {
-  email: string;
-  password: string;
-  // Adicione outras propriedades conforme necessário
-}
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 export default function Cadastro() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
 
     if (!name || !email || !password) {
-      setErrorMessage('Preencha todos os campos!');
+      setErrorMessage("Preencha todos os campos!");
       return;
     }
 
-    // Verificar se o usuário já existe
-    axios
-      .get<User[]>('https://smartfinsoluction-backend.vercel.app/users/all')
-      .then(response => {
-        const users = response.data;
-        const existingUser = users.find(user => user.email === email);
-        if (existingUser) {
-          setErrorMessage('Usuário já existe!');
-        } else {
-          // Prosseguir com o cadastro
-          const newUser = {
-            name: name,
-            email: email,
-            password: password
-          };
+    if(password.length < 6){
+      setErrorMessage("A senha deve conter pelo menos 6 caracteres")
+      return
+    }
 
-          axios
-            .post('https://smartfinsoluction-backend.vercel.app/signup', newUser)
-            .then(response => {
-              console.log(response.data); // Exibe a resposta do servidor
-              setShowSuccessMessage(true); // Mostra o aviso de sucesso
-              setErrorMessage(''); // Limpa o erro, se houver
+    setIsLoading(true)
+    try {
+      const { data } = await api.post("/users/register", {
+        email,
+        password,
+        name
+      },
+      { 
+        headers: { "Access-Control-Allow-Origin": "https://smartfin.vercel.app/" 
+      }})
 
-              navigate('/');
-            })
-            .catch(error => {
-              console.error(error);
-              // Lógica de tratamento de erro
-            });
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        // Lógica de tratamento de erro
-      });
-  };
+      const { token } = data;
+
+      if (token) {
+        alert("Usuário cadastrado com sucesso!")
+        navigate("/");
+      }
+
+    } catch (error) {
+      //@ts-ignore
+      setErrorMessage(error.response.data.err)
+    }finally{
+      setIsLoading(false)
+    }
+  }
 
   return (
     <>
-      <main className="w-[100%] text-white">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-6 bg-[#13141B] h-[100vh]">
-              <div className="container">
-                <div className=' h-100 pt-[50%]'>
-                  <img className='w-80' src="/smartfinSoluction.png" alt="" />
-                  <h1 className='pt-5 text-[30px]'>Cadastre-se já</h1>
-                </div>
-              </div>
+      <main className="flex-1 w-[100wh] h-[100vh] text-white">
+        <div className="flex flex-row">
+          <div className="hidden md:flex flex-1 justify-center bg-[#13141B] h-[100vh]">
+            <div className="self-center">
+              <img className="" src="/smartfinSoluction.png" alt="" />
+              <h1 className="text-[30px]">Cadastre-se já</h1>
             </div>
+          </div>
 
-            <div className="col-lg-6 bg-[#201F25] h-[100vh]">
-              <div className="container">
-                <div>
-                  <div className="formulario">
-                    <h4 className="font-bold text-left pb-4">Entre ou crie sua conta</h4>
-                    {showSuccessMessage && (
-                      <div className="fixed top-0 right-0 mt-4 mr-4 bg-green-500 text-white px-4 py-2 rounded shadow" role="alert">
-                        Cadastro realizado com sucesso!
-                      </div>
-                    )}
-                    {errorMessage && (
-                      <div className="fixed top-0 right-0 mt-4 mr-4 bg-red-500 text-white px-4 py-2 rounded shadow" role="alert">
-                        {errorMessage}
-                      </div>
-                    )}
-                    <form onSubmit={handleFormSubmit} className="needs-validation" noValidate>
-                      <div className="mb-3">
-                        <label htmlFor="name" className="form-label">Nome Completo</label>
-                        <input type="text" className={`form-control ${name ? 'border-green-500' : 'border-red-500'} focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50 rounded-md`} id="name" placeholder="Seu nome" value={name} onChange={e => setName(e.target.value)} required />
-                        {!name && <p className="text-red-500 text-sm mt-1">Por favor, insira seu nome completo.</p>}
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="email" className="form-label">Email</label>
-                        <input type="email" className={`form-control ${email ? 'border-green-500' : 'border-red-500'} focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50 rounded-md`} id="email" placeholder="Seu email" value={email} onChange={e => setEmail(e.target.value)} required />
-                        {!email && <p className="text-red-500 text-sm mt-1">Por favor, insira um endereço de email válido.</p>}
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Senha</label>
-                        <input type="password" className={`form-control ${password ? 'border-green-500' : 'border-red-500'} focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50 rounded-md`} id="password" placeholder="Sua senha" value={password} onChange={e => setPassword(e.target.value)} required />
-                        {!password && <p className="text-red-500 text-sm mt-1">Por favor, insira uma senha.</p>}
-                      </div>
-                      <button type="submit" className="btn btn-primary">Criar conta</button>
-                    </form>
-                  </div>
+          <div className="flex flex-1 bg-[#201F25] h-[100vh]">
+            <div className="flex flex-1 justify-center self-center">
+              {errorMessage && (
+                <div
+                  className="fixed top-0 right-0 mt-4 mr-4 bg-red-500 text-white px-4 py-2 rounded shadow"
+                  role="alert"
+                >
+                  {errorMessage}
                 </div>
-              </div>
+              )}
+              <form
+                onSubmit={handleSignUp}
+                className="w-[80%] needs-validation"
+                noValidate
+              >
+                <h4 className="font-bold text-left pb-4">
+                  Entre ou crie sua conta
+                </h4>
+                <div className="flex-col mb-3">
+                  <label htmlFor="name" className="form-label">
+                    Nome Completo
+                  </label>
+                  <br />
+                  <input
+                    type="text"
+                    className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md`}
+                    id="name"
+                    placeholder="Seu nome"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required = {true}
+                  />
+                </div>
+                <div className="flex-col mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email
+                  </label>
+                  <br />
+                  <input
+                    type="email"
+                    className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md`}
+                    id="email"
+                    placeholder="Seu email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required={true}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Senha
+                  </label>
+                  <br />
+                  <input
+                    type="password"
+                    className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md`}
+                    id="password"
+                    placeholder="Sua senha"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required={true}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-[#2D9BFC] w-[30%] mt-4 p-2 font-bold"
+                  style={{
+                    borderRadius: "10px",
+                  }}
+                >
+                  {!isLoading ? "Criar conta" : "Carregando..."}
+                </button>
+              </form>
             </div>
           </div>
         </div>
