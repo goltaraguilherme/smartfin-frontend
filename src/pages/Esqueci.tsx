@@ -1,16 +1,12 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../login.module.css';
-import Cookies from 'js-cookie';
 
 export default function RecuperacaoSenha() {
   const [email, setEmail] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleFormSubmit = (e: any) => {
     e.preventDefault();

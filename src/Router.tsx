@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import { useAuth } from './context/AuthContext';

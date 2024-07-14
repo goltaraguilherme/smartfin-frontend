@@ -1,6 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import { createContext, useState, ReactNode } from 'react';
 
 interface User {
   name: string;

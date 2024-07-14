@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../login.module.css'; // Importe o arquivo CSS de estilos
@@ -22,7 +22,7 @@ export default function NovaSenha() {
     // Envie o recoveryToken e a nova senha para o servidor
     axios
       .put(`https://smartfinsoluction-backend.vercel.app/reset-password/${recoveryToken}`, { newPassword })
-      .then((response) => {
+      .then(() => {
         setSuccessMessage('Senha redefinida com sucesso!');
         setErrorMessage('');
         navigate('/')

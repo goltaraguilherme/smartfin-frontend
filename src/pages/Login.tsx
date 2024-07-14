@@ -1,16 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { UserContext } from "../context/UserContext";
 import SplashScreen from "../components/SplashScreen";
 import api from "../services/api";
-
-interface User {
-  name: string;
-  email: string;
-  password: string;
-}
 
 interface LoginProps {
   handleLogin: () => void;
@@ -76,74 +69,6 @@ export default function Login({ handleLogin }: LoginProps) {
       setIsLoading(false);
     }
   }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !password) {
-      setError("Preencha todos os campos!");
-      return;
-    }
-
-    setIsLoading(true);
-
-    axios
-      .post("https://smartfinsoluction-backend.vercel.app/login", {
-        email,
-        password,
-      })
-      .then((response) => {
-        const { token } = response.data;
-
-        if (token) {
-          const expiresInHours = 1;
-          const expirationDate = new Date();
-          expirationDate.setTime(
-            expirationDate.getTime() + expiresInHours * 60 * 60 * 1000
-          );
-
-          Cookies.set("token", token, {
-            expires: expirationDate,
-            secure: true,
-            sameSite: "strict",
-          });
-
-          localStorage.setItem("token", token);
-
-          axios
-            .get(`https://smartfinsoluction-backend.vercel.app/user/${token}`)
-            .then((userResponse) => {
-              const { name, email } = userResponse.data;
-              Cookies.set("name", name);
-              Cookies.set("email", email);
-              setUser({ name, email });
-
-              if (name && email) {
-                setShowSplash(true);
-                setTimeout(() => {
-                  navigate("/spread", { replace: true });
-                  handleLogin();
-                }, 2000);
-              } else {
-                setError("Dados de usuário inválidos.");
-              }
-            })
-            .catch((userError) => {
-              console.error("Erro ao obter informações do usuário:", userError);
-              setError("Erro ao obter informações do usuário.");
-            });
-        } else {
-          setError("Falha no login. Verifique suas credenciais.");
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao fazer login:", error);
-        setError("Usuário ou senha incorretos! Tente novamente");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
 
   useEffect(() => {
     const token = Cookies.get("token");

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDarkTheme } from "../context/DarkThemeContext";
 import ReactApexChart from "react-apexcharts";
-import axios from "axios";
 import api from "../services/api";
 
 interface StockData {
@@ -49,6 +48,7 @@ export default function Spread() {
       },
     },
     xaxis: {
+      //@ts-ignore
       categories: spreadActual > 0 && processDataSpread(stockAData, stockBData).map(item => `Déb:${item.objeto.deb.toFixed(2)}<>Créd:${item.objeto.cred.toFixed(2)}`),
       labels: {
         style: {
@@ -159,6 +159,7 @@ export default function Spread() {
         setSpreadActual(spread)
 
       } catch (err) {
+        //@ts-ignore
         alert(err.response.data)
       } finally {
         setIsLoading(false)
@@ -402,14 +403,17 @@ export default function Spread() {
             <>
               <div>
                 <ReactApexChart
+                  //@ts-ignore
                   options={options}
                   series={[{
                     name: 'Camadas',
                     type: 'column',
+                    //@ts-ignore
                     data: processDataSpread(stockAData, stockBData).map(item=> item.freq)
                   }, {
                     name: 'Representatividade',
                     type: 'line',
+                    //@ts-ignore
                     data: processDataSpread(stockAData, stockBData).map(item => item.freq).map((item:number) => (item*100/processDataSpread(stockAData, stockBData).map(item => item.freq).reduce((acc, item) => acc + item, 0)).toFixed(2))
                   }]}
                   type="line"
@@ -419,13 +423,14 @@ export default function Spread() {
 
               <div>
                 <ReactApexChart
+                  //@ts-ignore
                   options={optionsColumnChart}
                   series={[{
                     name: stockA.toUpperCase(),
-                    data: stockAData.map((item, index) => item.close)
+                    data: stockAData.map((item) => item.close)
                   }, {
                     name: stockB.toUpperCase(),
-                    data: stockBData.map((item, index) => item.close)
+                    data: stockBData.map((item) => item.close)
                   }]}
                   type="area"
                   height={280}

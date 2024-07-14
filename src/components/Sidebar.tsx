@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { NavLink, useLocation } from "react-router-dom";
 import { useDarkTheme } from "../context/DarkThemeContext";
 
 interface SidebarProps {
@@ -9,7 +8,6 @@ interface SidebarProps {
 
 export const Sidebar = ({ handlelogout }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [openDropDown, setOpenDropDown] = useState<boolean>(false);
   const [switchToggleDarkMode, setSwitchToggleDarkMode] =
     useState<boolean>(false);
   const [darkToggle, setDarkToggle] = useState<boolean>(false);
@@ -27,7 +25,6 @@ export const Sidebar = ({ handlelogout }: SidebarProps) => {
         <div className="hidden md:flex my-[5vh] mr-4 justify-end">
           <button
             onClick={() => {
-              setOpenDropDown(false);
               setIsOpen(!isOpen);
             }}
           >

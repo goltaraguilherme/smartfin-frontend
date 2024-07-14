@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import styles from '../login.module.css';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface User {
   email: string;
