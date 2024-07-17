@@ -150,8 +150,8 @@ export default function Spread() {
     e.preventDefault();
 
     if (
-      stockA === "" ||
-      stockB === "" ||
+      stockA.trim() === "" ||
+      stockB.trim() === "" ||
       dateInit == "" ||
       dateFinal == "" ||
       spread == 0
@@ -163,8 +163,8 @@ export default function Spread() {
         const { data } = await api.post(
           "/utils/spread",
           {
-            ativoA: stockA,
-            ativoB: stockB,
+            ativoA: stockA.trim(),
+            ativoB: stockB.trim(),
             initDate: dateInit,
             finalDate: dateFinal,
           },
@@ -181,8 +181,8 @@ export default function Spread() {
         setStockAData(ativoA);
         setStockBData(ativoB);
         setSpreadActual(spread);
-        setStockAActual(stockA);
-        setStockBActual(stockB);
+        setStockAActual(stockA.trim());
+        setStockBActual(stockB.trim());
       } catch (err) {
         //@ts-ignore
         alert(err.response.data);
