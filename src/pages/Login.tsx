@@ -58,7 +58,7 @@ export default function Login({ handleLogin }: LoginProps) {
 
         setShowSplash(true);
         setTimeout(() => {
-          navigate("/spread", { replace: true });
+          navigate("/", { replace: true });
           handleLogin();
         }, 2000);
       }
@@ -74,7 +74,7 @@ export default function Login({ handleLogin }: LoginProps) {
     const token = Cookies.get("token");
     const tokenLS = localStorage.getItem("token");
     if (token && tokenLS) {
-      navigate("/spread", { replace: true });
+      navigate("/", { replace: true });
     }
   }, []);
 

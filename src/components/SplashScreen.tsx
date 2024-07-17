@@ -6,7 +6,7 @@ const SplashScreen = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const timeout = setTimeout(() => {
-      navigate("/spread")
+      navigate("/")
     }, 2000);
 
     return () => clearTimeout(timeout);

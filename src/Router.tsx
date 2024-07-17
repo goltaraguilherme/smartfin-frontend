@@ -35,7 +35,7 @@ export function Router() {
 
   const handleLogin = () => {
     login();
-    navigate('/spread');
+    navigate('/');
   };
 
   return (
@@ -50,7 +50,7 @@ export function Router() {
           </>
           : 
           <>
-            <Route path="/spread" element={<Spread />} />
+            <Route path="/" element={<Spread />} />
           </>
         }
       </Routes>

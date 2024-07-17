@@ -44,15 +44,15 @@ export const Sidebar = ({ handlelogout }: SidebarProps) => {
 
         </div>
 
-        <NavLink to="/spread">
+        <NavLink to="/">
           <div
             className={`${
-              String(location.pathname) === "/spread" && "md:bg-black md:no-underline underline rounded-lg"
+              String(location.pathname) === "/" && "md:bg-black md:no-underline underline rounded-lg"
             } duration-200`}
           >
             <button
               className={`${
-                String(location.pathname) === "/spread"
+                String(location.pathname) === "/"
                   ? "md:bg-[#D9D9D9] md:translate-x-1"
                   : "md:hover:bg-[#D9D9D9]"
               } flex items-center gap-5 w-[100%] py-2 px-3 rounded-lg duration-300`}
