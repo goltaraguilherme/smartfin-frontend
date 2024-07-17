@@ -22,6 +22,8 @@ export default function Spread() {
   const [dateFinal, setDateFinal] = useState<any>("");
   const [spread, setSpread] = useState<number>(0);
   const [spreadActual, setSpreadActual] = useState<number>(0);
+  const [stockAActual, setStockAActual] = useState<string>("");
+  const [stockBActual, setStockBActual] = useState<string>("");
   const [stockAData, setStockAData] = useState<StockData[]>([{date: "", open: 0, high: 0, low: 0, close: 0, adjClose: 0, volume: 0}]);
   const [stockBData, setStockBData] = useState<StockData[]>([{date: "", open: 0, high: 0, low: 0, close: 0, adjClose: 0, volume: 0}]);
 
@@ -49,7 +51,7 @@ export default function Spread() {
     },
     xaxis: {
       //@ts-ignore
-      categories: spreadActual > 0 && processDataSpread(stockAData, stockBData).map(item => `Déb:${item.objeto.deb.toFixed(2)}<>Créd:${item.objeto.cred.toFixed(2)}`),
+      categories: spreadActual > 0 && processDataSpread(stockAData, stockBData).map(item => `Déb:${item.deb.toFixed(2)}<>Créd:${item.cred.toFixed(2)}`),
       labels: {
         style: {
           colors: isDark ? "#FFFFFF" : "#000000",
@@ -157,6 +159,8 @@ export default function Spread() {
         setStockAData(ativoA)
         setStockBData(ativoB)
         setSpreadActual(spread)
+        setStockAActual(stockA)
+        setStockBActual(stockB)
 
       } catch (err) {
         //@ts-ignore
@@ -170,33 +174,38 @@ export default function Spread() {
   function processDataSpread(stockAData: StockData[], stockBData: StockData[]){
     if(spreadActual > 0){
       const stockLength = stockAData.length >= stockBData.length ? stockBData.length : stockAData.length
+      let minValue: number = 1000;
+      let maxValue: number = 0;
 
       //@ts-ignore
       const intervalos = []
       for(let i: number = 0; i < stockLength; i++){
-        if(Math.abs(stockAData[i].open - stockBData[i].open) >= spreadActual){
-          intervalos.push({deb: stockAData[i].open < stockBData[i].open ? stockAData[i].open : stockBData[i].open, cred: stockAData[i].open < stockBData[i].open ? stockAData[i].open + spreadActual : stockBData[i].open + spreadActual})
-        }
+        /*if(Math.abs(stockAData[i].open - stockBData[i].open) >= spreadActual){
+          intervalos.push({ativo:stockAData[i].open < stockBData[i].open ? stockAActual : stockBActual, dif: Math.abs(stockAData[i].open - stockBData[i].open)});
+          minValue = Math.abs(stockAData[i].open - stockBData[i].open) < minValue ? Math.abs(stockAData[i].open - stockBData[i].open) : minValue
+          maxValue = Math.abs(stockAData[i].open - stockBData[i].open) > maxValue ? Math.abs(stockAData[i].open - stockBData[i].open) : maxValue
+        }*/
         if(Math.abs(stockAData[i].close - stockBData[i].close) >= spreadActual){
-          intervalos.push({deb: stockAData[i].close < stockBData[i].close ? stockAData[i].close : stockBData[i].close, cred: stockAData[i].close < stockBData[i].close ? stockAData[i].close + spreadActual: stockBData[i].close + spreadActual})
+          intervalos.push({ativo:stockAData[i].close < stockBData[i].close ? stockAActual : stockBActual, dif: Math.abs(stockAData[i].close - stockBData[i].close)});
+          minValue = Math.abs(stockAData[i].close - stockBData[i].close) < minValue ? Math.abs(stockAData[i].close - stockBData[i].close) : minValue
+          maxValue = Math.abs(stockAData[i].close - stockBData[i].close) > maxValue ? Math.abs(stockAData[i].close - stockBData[i].close) : maxValue
         }
       }
 
-      let frequencias = new Map();
-
-      for (let i = 0; i < intervalos.length; i++) {
-          let item = JSON.stringify(intervalos[i]);
-          if (frequencias.has(item)) {
-              frequencias.set(item, frequencias.get(item) + 1);
-          } else {
-              frequencias.set(item, 1);
-          }
-      }
-      // Convertendo o Map em um array de objetos
       let resultado = [];
-      for (let [key, value] of frequencias) {
-          resultado.push({ objeto: JSON.parse(key), freq: value });
+
+      for(let j: number = minValue; j < maxValue; j+=spreadActual){
+        let freq = intervalos.reduce((counter, item) => {
+          if(item.dif >= j && item.dif < j + spreadActual){
+            return counter + 1;
+          }
+          return counter
+        }, 0)
+
+        resultado.push({deb: j, cred: j + spreadActual, freq,})
       }
+
+      console.log(intervalos.length, resultado.length)
       
       return resultado
     }
