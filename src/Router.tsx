@@ -35,7 +35,7 @@ export function Router() {
 
   const handleLogin = () => {
     login();
-    navigate('/spread');
+    navigate('/');
   };
 
   return (
