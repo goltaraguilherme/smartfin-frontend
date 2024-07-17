@@ -413,8 +413,8 @@ export default function Spread() {
           ) : (
             <>
               <div>
+                {/*@ts-ignoreD*/}
                 <ReactApexChart
-                  //@ts-ignore
                   options={options}
                   series={[{
                     name: 'Camadas',
