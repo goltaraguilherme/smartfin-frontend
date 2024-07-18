@@ -155,11 +155,11 @@ export default function Login({ handleLogin }: LoginProps) {
                   </button>
 
                   <div className="pt-4">
-                    {/* <p>
+                    <p>
                       <Link className="text-blue-500" to={"/esqueci"}>
                         Esqueci a senha
                       </Link>
-                    </p> */}
+                    </p>
 
                     <p>
                       Ainda não tem uma conta?{" "}

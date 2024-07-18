@@ -204,14 +204,7 @@ export default function Spread() {
       //@ts-ignore
       const intervalos = [];
       for (let i: number = 0; i < stockLength; i++) {
-        /*if(Math.abs(stockAData[i].open - stockBData[i].open) >= spreadActual){
-          intervalos.push({ativo:stockAData[i].open < stockBData[i].open ? stockAActual : stockBActual, dif: Math.abs(stockAData[i].open - stockBData[i].open)});
-          minValue = Math.abs(stockAData[i].open - stockBData[i].open) < minValue ? Math.abs(stockAData[i].open - stockBData[i].open) : minValue
-          maxValue = Math.abs(stockAData[i].open - stockBData[i].open) > maxValue ? Math.abs(stockAData[i].open - stockBData[i].open) : maxValue
-        }*/
-        if (
-          Math.abs(stockAData[i].close - stockBData[i].close) > spreadActual
-        ) {
+
           intervalos.push({
             ativo:
               stockAData[i].close < stockBData[i].close
@@ -221,6 +214,7 @@ export default function Spread() {
               Math.abs(stockAData[i].close - stockBData[i].close).toFixed(2)
             ),
           });
+
           minValue =
             Number(
               Math.abs(stockAData[i].close - stockBData[i].close).toFixed(2)
@@ -229,6 +223,7 @@ export default function Spread() {
                   Math.abs(stockAData[i].close - stockBData[i].close).toFixed(2)
                 )
               : minValue;
+
           maxValue =
             Number(
               Math.abs(stockAData[i].close - stockBData[i].close).toFixed(2)
@@ -237,7 +232,6 @@ export default function Spread() {
                   Math.abs(stockAData[i].close - stockBData[i].close).toFixed(2)
                 )
               : maxValue;
-        }
       }
 
       let stockAFreqLocal = intervalos.filter(
@@ -252,20 +246,34 @@ export default function Spread() {
         setStockBFreq(stockBFreqLocal);
       }
 
-      let resultado = [];
+      let resultado = [{deb: 0.0, cred: 0.0, freq: 0}]; 
 
-      for (let j: number = minValue; j < maxValue; j += spreadActual) {
-        let freq = intervalos.reduce((counter, item) => {
-          if (item.dif >= j && item.dif < j + spreadActual) {
-            return counter + 1;
-          }
-          return counter;
-        }, 0);
+      for (let j: number = 0; j < intervalos.length; j++) {
+        let minClass = j == 0 ? minValue : ((resultado[resultado.length -1].freq == 0) ? (resultado[resultado.length -1].deb+0.01).toFixed(2) : ((resultado[resultado.length -1].cred).toFixed(2)));
+        let maxClass = Number((Number(minClass) + spreadActual).toFixed(2));
 
-        resultado.push({ deb: j, cred: j + spreadActual, freq });
+        let hasMinClass = intervalos.some((item) => item.dif == Number(minClass));
+        let hasMaxClass = intervalos.some((item) => item.dif == Number(maxClass));
+
+        if(hasMaxClass && hasMinClass){
+          //let classe = `deb:${minClass}<>cred:${maxClass}`;
+
+          let freq = intervalos.reduce((counter, item) => {
+            if (item.dif >= Number(minClass) && item.dif < Number(maxClass)) {
+              return counter + 1;
+            }
+            return counter;
+          }, 0);
+  
+          resultado.push({deb: Number(minClass), cred:  Number(maxClass), freq });
+        }else{
+          resultado.push({deb: Number(minClass), cred: Number(maxClass), freq: 0 });
+        }
       }
 
-      console.log(intervalos, resultado);
+      resultado = resultado.filter(item => item.freq > 0);
+
+      console.log(resultado)
 
       return resultado;
     }

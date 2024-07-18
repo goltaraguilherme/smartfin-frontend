@@ -17,6 +17,7 @@ function App() {
     Cookies.remove("token")
     localStorage.removeItem("token")
     navigate("/", {replace: true})
+    window.location.reload()
   }
   
   useEffect(() => {

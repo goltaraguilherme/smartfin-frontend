@@ -36,6 +36,7 @@ export function Router() {
   const handleLogin = () => {
     login();
     navigate('/');
+    window.location.reload()
   };
 
   return (
