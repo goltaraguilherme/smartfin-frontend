@@ -3,7 +3,6 @@ import { useDarkTheme } from "../context/DarkThemeContext";
 import ReactApexChart from "react-apexcharts";
 import api from "../services/api";
 import Cookies from "js-cookie";
-import axios from "axios";
 
 interface StockData {
   date: string;
