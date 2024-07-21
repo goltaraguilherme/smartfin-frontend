@@ -56,7 +56,7 @@ export default function AdminComments() {
                   <table
                     className="min-w-full text-left text-sm font-light text-surface dark:text-white">
                     <thead
-                      className="border-b border-neutral-200 bg-white font-medium dark:border-white/10 dark:bg-body-dark">
+                      className="border-b border-neutral-200 font-medium bg-white dark:border-white/10 dark:bg-gray-600">
                       <tr>
                         <th scope="col" className="px-6 py-4">#</th>
                         <th scope="col" className="px-6 py-4">Nome</th>
