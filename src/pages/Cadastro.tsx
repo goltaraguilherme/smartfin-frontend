@@ -5,6 +5,9 @@ import api from "../services/api";
 export default function Cadastro() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [telephone, setTelephone] = useState<string>("");
+  const [corretora, setCorretora] = useState<string>("");
+  const [plan, setPlan] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -14,7 +17,7 @@ export default function Cadastro() {
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !telephone || !corretora || !plan) {
       setErrorMessage("Preencha todos os campos!");
       return;
     }
@@ -29,7 +32,10 @@ export default function Cadastro() {
       const { data } = await api.post("/users/register", {
         email,
         password,
-        name
+        name,
+        telephone,
+        corretora,
+        plan,
       },
       { 
         headers: { "Access-Control-Allow-Origin": "https://smartfin.vercel.app/" 
@@ -109,6 +115,40 @@ export default function Cadastro() {
                     required={true}
                   />
                 </div>
+                <div className="flex mb-3 justify-between w-[80%]">
+                  <div className="flex-col">
+                    <label htmlFor="tel" className="form-label">
+                      Telefone
+                    </label>
+                    <br />
+                    <input
+                      type="tel"
+                      className={`p-2 text-gray-800 focus:ring-opacity-50 rounded-md`}
+                      id="tel"
+                      pattern="([0-9]{2}) [0-9]{5}-[0-9]{4}"
+                      placeholder="(xx) xxxxx-xxxx"
+                      value={telephone}
+                      onChange={(e) => setTelephone(e.target.value)}
+                      required={true}
+                    />
+                  </div>
+
+                  <div className="flex-col">
+                    <label htmlFor="corretora" className="form-label">
+                      Corretora
+                    </label>
+                    <br />
+                    <input
+                      type="text"
+                      className={`p-2 text-gray-800 focus:ring-opacity-50 rounded-md`}
+                      id="corretora"
+                      placeholder="Sua corretora"
+                      value={corretora}
+                      onChange={(e) => setCorretora(e.target.value)}
+                      required={true}
+                    />
+                  </div>
+                </div>
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">
                     Senha
@@ -124,6 +164,35 @@ export default function Cadastro() {
                     required={true}
                   />
                 </div>
+
+                <div className="flex mt-3 w-[80%]">
+                  <div className="flex flex-1 gap-3 font-semibold">
+                    <input 
+                      className="cursor-pointer"
+                      type="radio" 
+                      id="semestral" 
+                      name="semestral"  
+                      checked={plan === "semestral" ? true : false} 
+                      onClick={() => setPlan("semestral")} />
+                    <label htmlFor="semestral">
+                      Plano Semestral
+                    </label>
+                  </div>
+
+                  <div className="flex flex-1 gap-3 font-semibold">
+                    <input 
+                      className="cursor-pointer"
+                      type="radio" 
+                      id="anual" 
+                      name="anual" 
+                      checked={plan === "anual" ? true : false} 
+                      onClick={() => setPlan("anual")} />
+                    <label htmlFor="anual">
+                      Plano Anual
+                    </label>
+                  </div>
+                </div>
+
                 <button
                   type="submit"
                   className="bg-[#2D9BFC] w-[30%] mt-4 p-2 font-bold"

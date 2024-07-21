@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useDarkTheme } from "../context/DarkThemeContext";
 import ReactApexChart from "react-apexcharts";
 import api from "../services/api";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 interface StockData {
   date: string;
@@ -16,6 +18,9 @@ interface StockData {
 export default function Spread() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [toggleCalculo, setToggleCalculo] = useState<boolean>(true);
+  const [toggleSugestoes, setToggleSugestoes] = useState<boolean>(false);
+  const [optionSelected, setOptionSelected] = useState<string>("sugest");
+  const [comentario, setComentario] = useState<string>("");
   const [stockA, setStockA] = useState<string>("");
   const [stockB, setStockB] = useState<string>("");
   const [dateInit, setDateInit] = useState<any>("");
@@ -279,6 +284,39 @@ export default function Spread() {
     }
   }
 
+  async function generateComment(e: React.FormEvent) {
+    e.preventDefault();
+    if(comentario == "")
+      return alert("Voce precisa preencher o campo de comentário antes de enviar.")
+
+    setIsLoading(true);
+    try {
+      const { data } = await api.post("/utils/comments", {
+        comment: comentario,
+        type: optionSelected,
+        userEmail: Cookies.get("email"),
+      },
+      {
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "https://smartfin.vercel.app/",
+        },
+      }
+    )
+
+      const { newComment } = data;
+      if(newComment){
+        alert("Enviado com sucesso!")
+      }
+      
+    } catch (error) {
+      //@ts-ignore
+      alert(error.response.data)
+    }finally {
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
     const today = new Date();
     setDateFinal(today.toISOString().split("T")[0]);
@@ -436,6 +474,97 @@ export default function Spread() {
           </form>
         )}
 
+        <button
+          className="flex bg-[#EFEFEF] mt-3 w-[100%] border-2 border-[#000000] p-3 rounded-lg justify-between items-center"
+          onClick={() => setToggleSugestoes(!toggleSugestoes)}
+        >
+          <p>Sugestões/Dúvidas</p>
+          <img
+            src="/assets/expand-dropdown.png"
+            alt="Expandir opções"
+            className={`${toggleSugestoes && "rotate-180"} duration-200`}
+          />
+        </button>
+
+        {toggleSugestoes && (
+          <form
+            className="flex flex-col"
+            onSubmit={(e) => {
+              generateComment(e);
+            }}
+          >
+            <div className="flex mt-3">
+              <div className="flex flex-1 gap-3 font-semibold">
+                <input 
+                  className="cursor-pointer"
+                  type="radio" 
+                  id="sugest" 
+                  name="sugest" 
+                  value="sugest" 
+                  checked={optionSelected === "sugest" ? true : false} 
+                  onClick={() => setOptionSelected("sugest")} />
+                <label htmlFor="sugest">
+                  Sugestão
+                </label>
+              </div>
+
+              <div className="flex flex-1 gap-3 font-semibold">
+                <input 
+                  className="cursor-pointer"
+                  type="radio" 
+                  id="duvida" 
+                  name="duvida" 
+                  value="duvida" 
+                  checked={optionSelected === "duvida" ? true : false} 
+                  onClick={() => setOptionSelected("duvida")} />
+                <label htmlFor="duvida">Dúvida</label>
+              </div>
+            </div>
+            <div className="flex flex-1 items-center justify-between py-2 px-4 rounded-lg border-b-2 border-[#000000] dark:border-[#EDEEF0]">
+              <div className="flex flex-1 flex-col">
+                <label className="dark:text-[#EDEEF0]" htmlFor="#inputSugestoes">
+                  Comentário
+                </label>
+                <textarea
+                  className="block p-2 w-full text-sm outline-none dark:text-[#EDEEF0]"
+                  placeholder="Escreva seus comentários aqui..."
+                  rows={5}
+                  id="inputSugestoes"
+                  value={comentario}
+                  onChange={(e) => {
+                    setComentario(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 mt-3">
+              <button
+                type="reset"
+                className="bg-[#E1E3E6] p-3 w-[50%] rounded-lg"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setComentario("")
+                }}
+              >
+                <p className="text-[#28292B] text-lg">Limpar</p>
+              </button>
+
+              <button
+                type="submit"
+                className="bg-[#068FF2] p-3 w-[50%] rounded-lg"
+                onClick={(e) => {
+                  generateComment(e);
+                }}
+              >
+                <p className="text-[#FFFFFF] text-lg">
+                  {isLoading ? "Carregando..." : "Enviar"}
+                </p>
+              </button>
+            </div>
+          </form>
+        )}
+
         <h1 className="text-2xl font-bold text-[#0E0E19] mt-3 dark:text-[#EDEEF0]">
           Como utilizar a função de spread
         </h1>
@@ -504,7 +633,7 @@ export default function Spread() {
                   options={options}
                   series={[
                     {
-                      name: "Camadas",
+                      name: "Negociações",
                       type: "column",
                       //@ts-ignore
                       data: processDataSpread(stockAData, stockBData).map(
@@ -512,7 +641,7 @@ export default function Spread() {
                       ),
                     },
                     {
-                      name: "Representatividade",
+                      name: "% de negociações",
                       type: "line",
                       //@ts-ignore
                       data: processDataSpread(stockAData, stockBData)
@@ -536,16 +665,25 @@ export default function Spread() {
                 <ReactApexChart
                   //@ts-ignore
                   options={optionsColumnChart}
-                  series={[
-                    {
-                      name: stockA.toUpperCase(),
-                      data: stockAData.map((item) => item.close),
-                    },
-                    {
-                      name: stockB.toUpperCase(),
-                      data: stockBData.map((item) => item.close),
-                    },
-                  ]}
+                  series={stockAData[0].close >= stockBData[0].close ?
+                      [{
+                        name: stockAActual.toUpperCase(),
+                        data: stockAData.map((item) => item.close),
+                      },
+                      {
+                        name: stockBActual.toUpperCase(),
+                        data: stockBData.map((item) => item.close),
+                      }] 
+                      :
+                      [{
+                        name: stockBActual.toUpperCase(),
+                        data: stockBData.map((item) => item.close),
+                      },
+                      {
+                        name: stockAActual.toUpperCase(),
+                        data: stockAData.map((item) => item.close),
+                      }]
+                  }
                   type="area"
                   height={280}
                 />

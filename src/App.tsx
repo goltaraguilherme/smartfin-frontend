@@ -25,7 +25,7 @@ function App() {
     const tokenLS = localStorage.getItem("token")
     if (!token || tokenLS == null) {
       logout();
-      navigate('/',  {replace: true});
+      //navigate('/',  {replace: true});
     }
   }, [ isLoggedIn && navigate, logout]);
 

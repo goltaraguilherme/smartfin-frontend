@@ -47,7 +47,7 @@ export function Router() {
             <Route path="/" element={<Login handleLogin={handleLogin} />} />
             <Route path="/esqueci" element={<Esqueci />} />
             <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="/esqueci/nova-senha/:recoveryToken" element={<NovaSenha />} />
+            <Route path="/esqueci/nova-senha/" element={<NovaSenha />} />
           </>
           : 
           <>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 
 export default function RecuperacaoSenha() {
   const [email, setEmail] = useState("");
@@ -15,13 +15,11 @@ export default function RecuperacaoSenha() {
       return;
     }
 
-    axios
-      .post("https://smartfinsoluction-backend.vercel.app/recover-password", {
+    api
+      .post("/users/forgot_password", {
         email,
       })
-      .then((response) => {
-        const { recoveryToken } = response.data;
-        console.log(recoveryToken);
+      .then(() => {
         setShowSuccessMessage(true);
         setErrorMessage("");
         setIsModalVisible(true);
@@ -77,9 +75,7 @@ export default function RecuperacaoSenha() {
                 <br />
                 <input
                   type="email"
-                  className={`p-2 w-[80%] form-control ${
-                    email ? "border-green-500" : "border-red-500"
-                  } focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50 rounded-md`}
+                  className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md`}
                   id="email"
                   placeholder="Seu email"
                   value={email}
