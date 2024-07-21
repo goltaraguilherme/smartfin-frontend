@@ -11,6 +11,8 @@ import Esqueci from './pages/Esqueci';
 import Cadastro from './pages/Cadastro';
 import NovaSenha from './pages/NovaSenha';
 import { UserProvider } from './context/UserContext';
+import AdminUsers from './pages/AdminUsers';
+import AdminComments from './pages/AdminComments';
 
 export function Router() {
   const location = useLocation();
@@ -52,6 +54,8 @@ export function Router() {
           : 
           <>
             <Route path="/" element={<Spread />} />
+            <Route path="/admin_users" element={<AdminUsers />} />
+            <Route path="/admin_comments" element={<AdminComments />} />
           </>
         }
       </Routes>
