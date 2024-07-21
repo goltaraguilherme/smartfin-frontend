@@ -112,7 +112,7 @@ export default function Login({ handleLogin }: LoginProps) {
                   </label>
                   <br />
                   <input
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value.trim())}
                     style={{
                       borderRadius: "10px",
                     }}
@@ -131,7 +131,7 @@ export default function Login({ handleLogin }: LoginProps) {
                   </label>
                   <br />
                   <input
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value.trim())}
                     style={{
                       borderRadius: "10px",
                     }}

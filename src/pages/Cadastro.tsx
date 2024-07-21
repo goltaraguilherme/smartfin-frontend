@@ -111,7 +111,7 @@ export default function Cadastro() {
                     id="email"
                     placeholder="Seu email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value.trim())}
                     required={true}
                   />
                 </div>
@@ -160,7 +160,7 @@ export default function Cadastro() {
                     id="password"
                     placeholder="Sua senha"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value.trim())}
                     required={true}
                   />
                 </div>

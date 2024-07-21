@@ -80,7 +80,7 @@ export default function NovaSenha() {
                 className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md form-control`}
                 id="tokenReset"
                 value={recoveryToken}
-                onChange={(e) => setRecoveryToken(e.target.value)}
+                onChange={(e) => setRecoveryToken(e.target.value.trim())}
                 required
               />
             </div>
@@ -93,7 +93,7 @@ export default function NovaSenha() {
                 className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md form-control`}
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.trim())}
                 required
               />
             </div>
@@ -106,7 +106,7 @@ export default function NovaSenha() {
                 className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md form-control`}
                 id="newPassword"
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                onChange={(e) => setNewPassword(e.target.value.trim())}
                 required
               />
             </div>
@@ -119,7 +119,7 @@ export default function NovaSenha() {
                 className={`p-2 w-[80%] text-gray-800 focus:ring-opacity-50 rounded-md form-control`}
                 id="confirmPassword"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value.trim())}
                 required
               />
             </div>

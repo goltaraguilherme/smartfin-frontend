@@ -16,6 +16,7 @@ interface StockData {
 
 export default function Spread() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingSuggest, setIsLoadingSuggest] = useState<boolean>(false);
   const [toggleCalculo, setToggleCalculo] = useState<boolean>(true);
   const [toggleSugestoes, setToggleSugestoes] = useState<boolean>(false);
   const [optionSelected, setOptionSelected] = useState<string>("sugest");
@@ -288,7 +289,7 @@ export default function Spread() {
     if(comentario == "")
       return alert("Voce precisa preencher o campo de comentário antes de enviar.")
 
-    setIsLoading(true);
+    setIsLoadingSuggest(true);
     try {
       const { data } = await api.post("/utils/comments", {
         comment: comentario,
@@ -312,7 +313,7 @@ export default function Spread() {
       //@ts-ignore
       alert(error.response.data)
     }finally {
-      setIsLoading(false)
+      setIsLoadingSuggest(false)
     }
   }
 
@@ -557,7 +558,7 @@ export default function Spread() {
                 }}
               >
                 <p className="text-[#FFFFFF] text-lg">
-                  {isLoading ? "Carregando..." : "Enviar"}
+                  {isLoadingSuggest ? "Carregando..." : "Enviar"}
                 </p>
               </button>
             </div>
