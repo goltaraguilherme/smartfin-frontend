@@ -323,7 +323,7 @@ export default function Spread() {
   }, []);
 
   return (
-    <div className="md:flex md:flex-row flex flex-col h-[100%] w-[100%] gap-4">
+    <div className="md:flex md:flex-row flex flex-col h-[100vh] w-[100%] gap-4">
       <div className="flex flex-col bg-[#FFFFFF] md:w-[30%] md:h-[100%] rounded-lg p-4 overflow-scroll no-scrollbar dark:bg-[#141414]">
         <h1 className="text-2xl font-bold text-[#0E0E19] dark:text-[#EDEEF0]">
           Spreads
@@ -503,21 +503,21 @@ export default function Spread() {
                   value="sugest" 
                   checked={optionSelected === "sugest" ? true : false} 
                   onClick={() => setOptionSelected("sugest")} />
-                <label htmlFor="sugest">
+                <label htmlFor="sugest" className="dark:text-[#EDEEF0]">
                   Sugestão
                 </label>
               </div>
 
               <div className="flex flex-1 gap-3 font-semibold">
                 <input 
-                  className="cursor-pointer"
+                  className="cursor-pointer dark:text-[#EDEEF0]"
                   type="radio" 
                   id="duvida" 
                   name="duvida" 
                   value="duvida" 
                   checked={optionSelected === "duvida" ? true : false} 
                   onClick={() => setOptionSelected("duvida")} />
-                <label htmlFor="duvida">Dúvida</label>
+                <label htmlFor="duvida" className="dark:text-[#EDEEF0]">Dúvida</label>
               </div>
             </div>
             <div className="flex flex-1 items-center justify-between py-2 px-4 rounded-lg border-b-2 border-[#000000] dark:border-[#EDEEF0]">
@@ -526,7 +526,7 @@ export default function Spread() {
                   Comentário
                 </label>
                 <textarea
-                  className="block p-2 w-full text-sm outline-none dark:text-[#EDEEF0]"
+                  className="block p-2 bg-transparent w-full text-sm outline-none dark:text-[#EDEEF0] dark:color-[#EDEEF0] "
                   placeholder="Escreva seus comentários aqui..."
                   rows={5}
                   id="inputSugestoes"

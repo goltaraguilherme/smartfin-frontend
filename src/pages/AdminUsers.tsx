@@ -56,7 +56,7 @@ export default function AdminUsers() {
   }, []);
 
   return (
-    <div className="md:flex md:flex-row flex flex-col h-[100%] w-[100%] gap-4">
+    <div className="md:flex md:flex-row flex flex-col h-[100vh] w-[100%] gap-4">
       <div className="flex flex-col h-[100%] w-[100%]">
         {
           isAllowed &&
