@@ -3,6 +3,7 @@ import { useDarkTheme } from "../context/DarkThemeContext";
 import ReactApexChart from "react-apexcharts";
 import api from "../services/api";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 interface StockData {
   date: string;
@@ -165,8 +166,8 @@ export default function Spread() {
     } else {
       setIsLoading(true);
       try {
-        const { data } = await api.post(
-          "/utils/spread",
+        const { data } = await axios.post(
+          "https://smartfin-api.vercel.app/utils/spread",
           {
             ativoA: stockA.trim(),
             ativoB: stockB.trim(),
@@ -175,8 +176,7 @@ export default function Spread() {
           },
           {
             headers: {
-              authorization: "Bearer " + localStorage.getItem("token"),
-              "Access-Control-Allow-Origin": "https://smartfin.vercel.app/",
+              authorization: "Bearer " + localStorage.getItem("token")
             },
           }
         );
