@@ -147,9 +147,14 @@ export default function Spread() {
 
     setStockA("");
     setStockB("");
-    setDateInit("");
-    setDateFinal("");
     setSpread(0);
+    const today = new Date();
+    
+    const previousYearDate = new Date(today.setFullYear(today.getFullYear() - 1));
+    const formattedDate = previousYearDate.toISOString().split('T')[0];
+
+    setDateFinal(new Date().toISOString().split("T")[0]);
+    setDateInit(formattedDate);
   }
 
   async function generateSpread(e: React.FormEvent) {
@@ -319,7 +324,13 @@ export default function Spread() {
 
   useEffect(() => {
     const today = new Date();
-    setDateFinal(today.toISOString().split("T")[0]);
+    
+    const previousYearDate = new Date(today.setFullYear(today.getFullYear() - 1));
+    const formattedDate = previousYearDate.toISOString().split('T')[0];
+
+    setDateFinal(new Date().toISOString().split("T")[0]);
+    setDateInit(formattedDate);
+
   }, []);
 
   return (
@@ -403,7 +414,6 @@ export default function Spread() {
                     className="font-bold text-sm w-[90%] bg-transparent outline-none dark:text-[#EDEEF0]"
                     id="inputSalario"
                     type="date"
-                    placeholder={new Date().toISOString().split("T")[0]}
                     value={dateInit}
                     onChange={(e) => {
                       setDateInit(e.target.value);
